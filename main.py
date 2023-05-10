@@ -29,7 +29,6 @@ shipment_text = int(shipment_text.replace(",", ""))
 alchemy_lab = driver.find_element(By.CSS_SELECTOR, "[id='buyAlchemy lab']")
 alchemy_lab_text = (alchemy_lab.find_element(By.TAG_NAME, "b").text).split(" ")[3]
 alchemy_lab_text = int(alchemy_lab_text.replace(",", ""))
-# alchemy_lab_text = alchemy_lab_text.replace(",", "")
 print(cursor_text)
 print(grandma_text)
 print(shipment_text)

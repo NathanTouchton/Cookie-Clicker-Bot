@@ -1,30 +1,49 @@
 """This is a bot program for cookie clicker that I'm making to learn how to use Selenium."""
 
-from pprint import pprint
+from time import time
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
 
-driver.get("https://www.python.org/")
-# Extract date and name of upcoming events and print them to a nested dict
+driver.get("http://orteil.dashnet.org/experiments/cookie/")
 
-element = driver.find_element(By.CLASS_NAME, "event-widget")
-times = element.find_elements(By.TAG_NAME, "time")
-event_names = element.find_elements(By.CSS_SELECTOR, "a:not([title='More Events'])")
+### I need to program the bot to click as fast as possible
+# Every 5 seconds, the bot should check to see which upgrades it can afford.
+# The more expensive upgrade should be purchased.###
 
-time_text = [t.text for t in times]
-event_names_text = [e.text for e in event_names]
+money = int(driver.find_element(By.CSS_SELECTOR, "[id='money']").text)
+cookie = driver.find_element(By.CSS_SELECTOR, "[id='cookie']")
+cursor = driver.find_element(By.CSS_SELECTOR, "[id='buyCursor']")
+cursor_text = int((cursor.find_element(By.TAG_NAME, "b").text).split(" ")[2])
+grandma = driver.find_element(By.CSS_SELECTOR, "[id='buyGrandma']")
+grandma_text = int((grandma.find_element(By.TAG_NAME, "b").text).split(" ")[2])
+shipment = driver.find_element(By.CSS_SELECTOR, "[id='buyShipment']")
+shipment_text = (shipment.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+shipment_text = int(shipment_text.replace(",", ""))
+alchemy_lab = driver.find_element(By.CSS_SELECTOR, "[id='buyAlchemy lab']")
+alchemy_lab_text = (alchemy_lab.find_element(By.TAG_NAME, "b").text).split(" ")[3]
+alchemy_lab_text = int(alchemy_lab_text.replace(",", ""))
+# alchemy_lab_text = alchemy_lab_text.replace(",", "")
+print(cursor_text)
+print(grandma_text)
+print(shipment_text)
+print(alchemy_lab_text)
+# I skipped factory and mine
 
-event_dict = {
-    time_text.index(i): {
-        "time": i,
-        "event name": event_names_text[time_text.index(i)],
-    } for i in time_text
-}
-
-pprint(event_dict)
+def run_game():
+    """This function has all the procedural code and the AI for the bot."""
+    number_of_seconds = 5
+    start_time = time()
+    while time() - start_time < number_of_seconds:
+        cookie.click()
+    
+    run_game()
 
 driver.quit()
+# run_game()

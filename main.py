@@ -4,6 +4,7 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
+# from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.firefox import GeckoDriverManager
 
 driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
@@ -13,10 +14,7 @@ driver.get("https://www.python.org/")
 
 element = driver.find_element(By.CLASS_NAME, "event-widget")
 times = element.find_elements(By.TAG_NAME, "time")
-event_names = element.find_elements(By.TAG_NAME, "a")
-
-for e in times:
-    print(e.text)
+event_names = element.find_elements(By.CSS_SELECTOR, "a:not([title='More Events'])")
 
 for e in event_names:
     print(e.text)

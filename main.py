@@ -16,10 +16,17 @@ element = driver.find_element(By.CLASS_NAME, "event-widget")
 times = element.find_elements(By.TAG_NAME, "time")
 event_names = element.find_elements(By.CSS_SELECTOR, "a:not([title='More Events'])")
 
-for e in event_names:
-    print(e.text)
+time_text = [t.text for t in times]
+event_names_text = [e.text for e in event_names]
+# print(time_text + event_names_text)
+
+
 
 driver.quit()
+filler_dict: {
+    0: {
+        "time": "00:00",
+        "name": "insert name here"
 
-###CLass: medium-widget event-widget last
-# I need to find the timedate value and text from the time tags.###
+    }
+}

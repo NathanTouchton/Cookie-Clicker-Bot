@@ -17,37 +17,35 @@ body = driver.find_element(By.TAG_NAME, "body")
 # Every 5 seconds, the bot should check to see which upgrades it can afford.
 # The more expensive upgrade should be purchased.###
 
-cookie = driver.find_element(By.CSS_SELECTOR, "[id='cookie']")
-cursor = driver.find_element(By.CSS_SELECTOR, "[id='buyCursor']")
-cursor_text = (cursor.find_element(By.TAG_NAME, "b").text).split(" ")[2]
-grandma = driver.find_element(By.CSS_SELECTOR, "[id='buyGrandma']")
-grandma_text = (grandma.find_element(By.TAG_NAME, "b").text).split(" ")[2]
-factory = driver.find_element(By.CSS_SELECTOR, "[id='buyFactory']")
-factory_text = (factory.find_element(By.TAG_NAME, "b").text).split(" ")[2]
-mine = driver.find_element(By.CSS_SELECTOR, "[id='buyMine']")
-mine_text = (mine.find_element(By.TAG_NAME, "b").text).split(" ")[2]
-mine_text = mine_text.replace(",", "")
-shipment = driver.find_element(By.CSS_SELECTOR, "[id='buyShipment']")
-shipment_text = (shipment.find_element(By.TAG_NAME, "b").text).split(" ")[2]
-shipment_text = shipment_text.replace(",", "")
-alchemy_lab = driver.find_element(By.CSS_SELECTOR, "[id='buyAlchemy lab']")
-alchemy_lab_text = (alchemy_lab.find_element(By.TAG_NAME, "b").text).split(" ")[3]
-alchemy_lab_text = alchemy_lab_text.replace(",", "")
-
-upgrades = {
-    alchemy_lab_text: alchemy_lab,
-    shipment_text: shipment,
-    mine_text: mine,
-    factory_text: factory,
-    grandma_text: grandma,
-    cursor_text: cursor,
-}
-
-ignored_exceptions = (StaleElementReferenceException)
+ignored_exceptions = StaleElementReferenceException
 
 def run_game():
-    ###I got rid of theh errors, but I can't figure out why it isn't buying upgrades.###
     """This function has all the procedural code and the AI for the bot."""
+    cookie = driver.find_element(By.CSS_SELECTOR, "[id='cookie']")
+    cursor = driver.find_element(By.CSS_SELECTOR, "[id='buyCursor']")
+    cursor_text = (cursor.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+    grandma = driver.find_element(By.CSS_SELECTOR, "[id='buyGrandma']")
+    grandma_text = (grandma.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+    factory = driver.find_element(By.CSS_SELECTOR, "[id='buyFactory']")
+    factory_text = (factory.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+    mine = driver.find_element(By.CSS_SELECTOR, "[id='buyMine']")
+    mine_text = (mine.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+    mine_text = mine_text.replace(",", "")
+    shipment = driver.find_element(By.CSS_SELECTOR, "[id='buyShipment']")
+    shipment_text = (shipment.find_element(By.TAG_NAME, "b").text).split(" ")[2]
+    shipment_text = shipment_text.replace(",", "")
+    alchemy_lab = driver.find_element(By.CSS_SELECTOR, "[id='buyAlchemy lab']")
+    alchemy_lab_text = (alchemy_lab.find_element(By.TAG_NAME, "b").text).split(" ")[3]
+    alchemy_lab_text = alchemy_lab_text.replace(",", "")
+
+    upgrades = {
+        alchemy_lab_text: alchemy_lab,
+        shipment_text: shipment,
+        mine_text: mine,
+        factory_text: factory,
+        grandma_text: grandma,
+        cursor_text: cursor,
+    }
     number_of_seconds = 5
     start_time = time()
     while time() - start_time < number_of_seconds:
@@ -58,12 +56,15 @@ def run_game():
         if money > int(key):
             try:
                 value.click()
+                break
             except StaleElementReferenceException:
                 WebDriverWait(
                     driver=driver,
                     timeout=10,
                     ignored_exceptions=ignored_exceptions
                 ).until(EC.presence_of_element_located((By.ID, "game")))
+                value.click()
+                break
     run_game()
 
 run_game()
